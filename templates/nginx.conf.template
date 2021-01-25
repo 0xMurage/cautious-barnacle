@@ -27,6 +27,7 @@ http{
         location /tenants {
             proxy_pass ${TENANTS_URL};
             proxy_set_header X-Forwarded-For $remote_addr;
+
         }
     }
 }
