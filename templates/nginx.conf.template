@@ -1,0 +1,32 @@
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+
+include /etc/nginx/modules_enabled/*.conf;
+
+
+events {
+    worker_connections 1024;
+}
+
+http{
+
+    server{
+
+        listen ${NGINX_PORT};
+
+        server_name ${NGINX_SERVER};
+
+        proxy_hide_header X-Powered-By;
+
+        location /auth {
+            proxy_pass ${AUTH_URL};
+            proxy_set_header X-Forwarded-For $remote_addr;
+        }
+
+        location /tenants {
+            proxy_pass ${TENANTS_URL};
+            proxy_set_header X-Forwarded-For $remote_addr;
+        }
+    }
+}
